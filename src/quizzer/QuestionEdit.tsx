@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import {Button, Form } from "react-bootstrap";
+import { NumericLiteral } from "typescript";
 import { Question, QuestionType } from "../interfaces/question";
 
 import "./QuestionEdit.css";
@@ -10,7 +12,7 @@ export const QuestionEdit = ({
     editQuestion,
     removeQuestion,
     swapQuestion
-}: {}) => {
+}: {index:number, lastIndex:number,question:any,editQuestion:any,swapQuestion:any,removeQuestion:any }) => {
     const [a, b] = useState<number>(
         question.options.findIndex((s: string) => question.expected === s)
     );
@@ -111,7 +113,7 @@ export const QuestionEdit = ({
                                 <Form.Select
                                     className="type_dropdown"
                                     value={question.type}
-                                    onChange={handleSwitch}
+                                    onChange={switchMulti}
                                 >
                                     <option
                                         data-testid={

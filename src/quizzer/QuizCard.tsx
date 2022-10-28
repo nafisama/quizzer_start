@@ -1,4 +1,5 @@
 import React from "react";
+import { Form } from "react-bootstrap";
 import { Quiz } from "../interfaces/quiz";
 
 import "./QuizCard.css";
@@ -7,7 +8,7 @@ import { Question } from "../interfaces/question";
 export const QuizCard = ({
     quiz,
     handleClick
-}: {) => {
+}: {quiz:Quiz,handleClick:any}) => {
     const filteredQuestions = quiz.questionList.filter(
         (q: Question): boolean =>
             (quiz.published && q.published) || !quiz.published

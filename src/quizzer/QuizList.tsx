@@ -10,7 +10,7 @@ export const QuizList = ({
     editQuiz,
     deleteQuiz,
     showModal
-}: {}) => {
+}: {quizzes:Quiz[],editQuiz:any,deleteQuiz:any,showModal:any}) => {
     const [displayId, setDisplayId] = useState<null | number>(null);
 
     const handleQuizView = (id: number) => {
@@ -37,7 +37,7 @@ export const QuizList = ({
                     </Button>
                 </>
             )}
-            {quizzes.map((quiz: Quiz) => {
+            {quizzes.map((quiz: Quiz): => {
                 if (displayId === quiz.id) {
                     return (
                         <QuizView

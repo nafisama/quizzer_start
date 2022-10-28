@@ -12,13 +12,14 @@ export const QuizEdit = ({
     deleteQuiz,
     switchEdit,
     resetView
-}: {) => {
+}: {quiz:Quiz,editQuiz:any,deleteQuiz:any,switchEdit:any ,resetView:any}) => {
     const [newQuiz, setNewQuiz] = useState<Quiz>({ ...quiz });
 
     const editQuestion = (questionId: number, newQuestion: Question) => {
         setNewQuiz({
             ...newQuiz,
             questionList: newQuiz.questionList.map(
+                (q: Question): Question => (q.id === questionId ? newQuestion : q)
             )
         });
     };
@@ -27,6 +28,7 @@ export const QuizEdit = ({
         setNewQuiz({
             ...newQuiz,
             questionList: newQuiz.questionList.filter(
+                (q: Question): boolean => (q.id !== questionId)
             )
         });
     };
@@ -42,7 +44,7 @@ export const QuizEdit = ({
                 (q: Question, idx: number): Question => {
                     if (idx === idx1) return newQuiz.questionList[idx2];
                     if (idx === idx2) return newQuiz.questionList[idx1];
-                    return;
+                    return q;
                 }
             )
         });
@@ -68,21 +70,19 @@ export const QuizEdit = ({
                             ></Form.Control>
                         </div>
                         <Form.Check
+                            inline
                             className="published_check"
                             type="checkbox"
                             id="is-published_check"
                             label="Quiz Published"
                             data-testid="Quiz Published"
                             checked={newQuiz.published}
-                            onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>
-                            ) => {
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
                                 setNewQuiz({
                                     ...newQuiz,
-                                    published: 
-                                });
-                            }}
-                        ></Form.Check>
+                                    published: e.target.checked})
+                            }
+                        />
                     </div>
                     <Form.Label>Description: </Form.Label>
                     <Form.Control
