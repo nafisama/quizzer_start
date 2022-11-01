@@ -6,47 +6,51 @@ import { QuestionEdit } from "./QuestionEdit";
 
 import "./QuizEdit.css";
 
-export const QuizEdit = ({
+
+export function QuizEdit ({
     quiz,
     editQuiz,
     deleteQuiz,
     switchEdit,
-    resetView
-}: {quiz:Quiz,editQuiz:any,deleteQuiz:any,switchEdit:any ,resetView:any}) => {
+    resetQuizView
+}: { quiz: Quiz,
+    editQuiz: (qId: number, newQuiz: Quiz) => void,
+    deleteQuiz: (qId: number) => void,
+    switchEdit: () => void,
+    resetQuizView: () => void,
+
+}): JSX.Element {
+    
     const [newQuiz, setNewQuiz] = useState<Quiz>({ ...quiz });
 
     const editQuestion = (questionId: number, newQuestion: Question) => {
         setNewQuiz({
             ...newQuiz,
-            questionList: newQuiz.questionList.map(
-                (q: Question): Question => (q.id === questionId ? newQuestion : q)
-            )
+            questionList: newQuiz.questionList.map((question: Question): Question => questionId === question.id ? {...newQuestion} : question)
         });
     };
 
     const removeQuestion = (questionId: number) => {
         setNewQuiz({
             ...newQuiz,
-            questionList: newQuiz.questionList.filter(
-                (q: Question): boolean => (q.id !== questionId)
-            )
+            questionList: newQuiz.questionList.filter((question: Question): boolean => questionId !== question.id)
         });
     };
 
     const saveChanges = () => {
-        editQuiz(quiz.id, { ...newQuiz });
+        const newTitle = "spam"
+        const newquiz = {...newQuiz, title: newTitle}
+        setNewQuiz(newquiz)
+        editQuiz(quiz.id, newQuiz);
     };
 
     const swapQuestion = (idx1: number, idx2: number) => {
+        const question1 = newQuiz.questionList[idx1]
+        const question2 = newQuiz.questionList[idx2]
         setNewQuiz({
             ...newQuiz,
             questionList: newQuiz.questionList.map(
-                (q: Question, idx: number): Question => {
-                    if (idx === idx1) return newQuiz.questionList[idx2];
-                    if (idx === idx2) return newQuiz.questionList[idx1];
-                    return q;
-                }
-            )
+                (idx: Question): Question => idx === question1 ? idx = question2 : idx === question2 ? idx = question1 : idx)
         });
     };
 
@@ -70,19 +74,21 @@ export const QuizEdit = ({
                             ></Form.Control>
                         </div>
                         <Form.Check
-                            inline
                             className="published_check"
                             type="checkbox"
                             id="is-published_check"
                             label="Quiz Published"
                             data-testid="Quiz Published"
                             checked={newQuiz.published}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                            onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
                                 setNewQuiz({
                                     ...newQuiz,
-                                    published: e.target.checked})
-                            }
-                        />
+                                    published: !newQuiz.published
+                                });
+                            }}
+                        ></Form.Check>
                     </div>
                     <Form.Label>Description: </Form.Label>
                     <Form.Control
@@ -140,6 +146,7 @@ export const QuizEdit = ({
                             variant="success"
                             className="save_edit_btn"
                             onClick={() => {
+                                console.log(newQuiz.title)
                                 saveChanges();
                                 switchEdit();
                             }}
@@ -154,7 +161,7 @@ export const QuizEdit = ({
                         variant="danger"
                         onClick={() => {
                             deleteQuiz(quiz.id);
-                            resetView();
+                            resetQuizView();
                         }}
                     >
                         Delete Quiz

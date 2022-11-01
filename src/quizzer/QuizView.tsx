@@ -4,14 +4,18 @@ import { QuizExpanded } from "./QuizExpanded";
 import { QuizEdit } from "./QuizEdit";
 
 import "./QuizView.css";
-import { Button } from "react-bootstrap";
 
-export const QuizView = ({
+export function QuizView ({
     quiz,
     editQuiz,
     deleteQuiz,
-    resetView
-}: {quiz:Quiz,editQuiz:any,deleteQuiz:any,resetView:any}) => {
+    resetQuizView
+}: {
+    quiz: Quiz,
+    editQuiz: (qId: number, newQuiz: Quiz)=> void,
+    deleteQuiz: (qId: number) => void,
+    resetQuizView: () => void,
+}): JSX.Element{
     const [edit, setEdit] = useState(false);
 
     const switchEdit = () => {
@@ -20,29 +24,25 @@ export const QuizView = ({
 
     return (
         <div className="quiz_card">
-            <Button
-                    className="edit_button"
-                    onClick={() => {setEdit(!edit)}}
-                >
-                    Edit
-                </Button>
-            {edit &&( 
+            {edit && (
                 <QuizEdit
                     quiz={quiz}
                     editQuiz={editQuiz}
                     deleteQuiz={deleteQuiz}
                     switchEdit={switchEdit}
-                    resetView={resetView}
-                ></QuizEdit>)
-            }
-            {!edit && 
+                    resetQuizView={resetQuizView}
+                ></QuizEdit>
+            )
+}
+            {!edit && (
                 <QuizExpanded
                     quiz={quiz}
                     editQuiz={editQuiz}
-                    resetView={resetView}
+                    resetQuizView={resetQuizView}
                     switchEdit={switchEdit}
                 ></QuizExpanded>
-            }
+            )
+}
         </div>
     );
-};
+}
